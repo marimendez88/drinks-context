@@ -1,6 +1,9 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
+import { CategoriesContext } from "./../context/CategoriesContext";
 
 const Form = () => {
+  const { categories } = useContext(CategoriesContext);
+
   return (
     <Fragment>
       <form className="col-12">
@@ -17,7 +20,14 @@ const Form = () => {
             />
           </div>
           <div className="col-md-4">
-            <select className="form-control" name="category"></select>
+            <select className="form-control" name="category">
+              <option>- Select Category -</option>
+              {categories.map((category) => (
+                <option key={category.strCategory} value={category.strCategory}>
+                  {category.strCategory}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="col-md-4">
             <input
