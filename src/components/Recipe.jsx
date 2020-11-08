@@ -17,8 +17,14 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
-    width: 800,
+    width: 400,
     backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    overflow: 'scroll',
+    height: '100%',
+    maxHeight: 700,
+    display: 'block',
   },
 }));
 
@@ -34,8 +40,17 @@ const Recipe = ({ recipe }) => {
     setOpen(false);
   };
 
-  const { saveRecipeId, recipeDetails } = useContext(ModalContext);
-  console.log(recipeDetails);
+  const { saveRecipeId, recipeDetails, saveRecipeDetails } = useContext(
+    ModalContext
+  );
+
+  const showIngredients = (recipeDetails) => {
+    let ingredients = [];
+    for (let i = 0; i < 16; i++) {
+      if (recipeDetails[`strIngredients${1}`]) {
+      }
+    }
+  };
 
   return (
     <div className="col-md-4 mb-3">
@@ -54,14 +69,31 @@ const Recipe = ({ recipe }) => {
             View Recipe
           </button>
           <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
             open={open}
             onClose={() => {
               saveRecipeId(null);
+              saveRecipeDetails([]);
               handleClose();
             }}
           >
             <div style={modalStyle} className={classes.paper}>
-              Name: {recipeDetails.strDrink}
+              <h2 id="simple-modal-title">{recipeDetails.strDrink}</h2>
+              <h3 className="m4"> Instructions:</h3>
+              <p id="simple-modal-description">
+                {recipeDetails.strInstructions}
+              </p>
+              <img
+                className="img-fluid mt-4"
+                src={recipeDetails.strDrinkThumb}
+              />
+              <h3>Ingredients</h3>
+              <ul>{showIngredients(recipeDetails)}</ul>
+              <hr></hr>
+              <p id="simple-modal-description">
+                Categories: {recipeDetails.strCategory}
+              </p>
             </div>
           </Modal>
         </div>

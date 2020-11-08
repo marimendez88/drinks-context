@@ -14,17 +14,20 @@ const RecipesProvider = (props) => {
     name: '',
     category: '',
   });
+
   const [request, saveRequest] = useState(false);
 
-  /** execute the API request*/
+  const baseUrl = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i`;
+
+  const fetchApiData = async () => {
+    const url = `${baseUrl}=${search.name}&c=${search.category}`;
+    const recipes = await axios.get(url);
+    saveRecipes(recipes.data.drinks);
+  };
+
   useEffect(() => {
     if (request) {
-      const getRecipes = async () => {
-        const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${search.name}&c=${search.category}`;
-        const recipes = await axios.get(url);
-        saveRecipes(recipes.data.drinks);
-      };
-      getRecipes();
+      fetchApiData();
     }
   }, [search]);
 

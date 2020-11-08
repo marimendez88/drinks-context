@@ -11,17 +11,18 @@ const ModalProvider = (props) => {
   const [recipeId, saveRecipeId] = useState(null);
   const [recipeDetails, saveRecipeDetails] = useState([]);
 
-  console.log(recipeId);
-  /** execute the API request*/
+  const baseUrl = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i`;
+
+  const fetchApiData = async () => {
+    const url = `${baseUrl}=${recipeId}`;
+    const recipe = await axios.get(url);
+    saveRecipeDetails(recipe.data.drinks[0]);
+  };
+
   useEffect(() => {
-    const getRecipe = async () => {
-      if (recipeId) {
-        const url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${recipeId}`;
-        const recipe = await axios.get(url);
-        saveRecipeDetails(recipe.data.drinks[0]);
-      }
-    };
-    getRecipe();
+    if (recipeId) {
+      fetchApiData();
+    }
   }, [recipeId]);
 
   /** The info which we need to pass to our children  */
@@ -30,6 +31,7 @@ const ModalProvider = (props) => {
       value={{
         saveRecipeId,
         recipeDetails,
+        saveRecipeDetails,
       }}
     >
       {props.children}
